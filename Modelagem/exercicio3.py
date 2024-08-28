@@ -22,4 +22,15 @@ plt.show()
 
 
 # Não tive muita criatividade em 1 dia para pensar em uma analise diferente das que foram apresentadas em sala. Então fiz essa simples
-# Usando tabelas e gráficos de dados de Intrução e Salario, percebemos que normalmente funcionarios que apresentam ensinos superiores tendem a ganhar mais.
+
+# Distribuição de Salários por Grau de Instrução:
+
+# Ensino Fundamental: A maioria dos funcionários com ensino fundamental parece ter salários entre 5 a 10 salários mínimos. Isso sugere uma distribuição de salários mais concentrada em faixas salariais mais baixas.
+# Ensino Médio: Os funcionários com ensino médio mostram uma faixa de salário mais ampla, embora ainda com uma concentração significativa entre 7.5 e 12.5 salários mínimos.
+# Ensino Superior: A distribuição salarial para funcionários com ensino superior é mais dispersa, com alguns alcançando mais de 20 salários mínimos. Isso indica que o grau de instrução está positivamente correlacionado com salários mais altos.
+
+# Comparação com Kernel Density Estimate (KDE):
+
+# O uso do KDE ajuda a visualizar a distribuição suavizada dos dados. 
+# Para o ensino superior, a linha KDE é mais dispersa, o que indica uma maior variabilidade nos salários para esse grupo.
+#  Já para o ensino fundamental, a curva é mais concentrada, refletindo uma menor variação salarial.
