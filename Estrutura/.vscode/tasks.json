@@ -7,8 +7,7 @@
             "command": "cl.exe",
             "args": [
                 "/EHsc",
-                "exercicio1.c",
-                "exercicio2.c",
+                "Atividade03\\atividade03.c"  // Corrigido o caminho do main.c
             ],
             "group": {
                 "kind": "build",
