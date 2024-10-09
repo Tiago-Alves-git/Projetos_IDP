@@ -1,5 +1,6 @@
 //Arquivo ListaSequencial.h
 #define MAX 10
+
 struct megasena{
     int codigo;
     int concurso;
