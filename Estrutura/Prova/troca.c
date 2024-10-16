@@ -12,27 +12,15 @@
 
     int inteiros[10] = {{1}, {41}, {21}, {12}, {2}, {3}, {5}, {9}, {11}, {10}};
 
-int main()
-{
-    // criando a lista
-    Lista* lista = cria_lista();
-    // inserindo a lista
-    for (int i = 0; i < 10; i++)
-    {
-        insere_lista_ordenada(lista, inteiros[i]);
-    }
 
-    teste();
-    return 0;
-}
-
-int trocaNós(struct elemento **head, int n)
+void trocaNós(Lista *head, int n)
 {
     // Se a lista for vazia
     if (head == NULL)
         return;
 
-    struct elemento *ant = NULL, *curr = *head;
+    Elem* curr = *head, ant = NULL;
+    // struct elemento *ant = NULL, *curr = *head;
 
     // Encontrar nó
     do
@@ -51,14 +39,14 @@ int trocaNós(struct elemento **head, int n)
     // Se o nó é o ultimo, trocar com o primeiro
     if (curr->prox == *head)
     {
-        struct elemento *nextNode = *head;
+        Elem* nextNode = *head;
         ant->prox = nextNode;
         curr->prox = nextNode->prox;
         return;
     }
 
     // Realizar a troca normalmente caso tudo certo
-    struct elemento *nextNode = curr->prox;
+    *Elem nextNode = curr->prox;
     ant->prox = nextNode;
     curr->prox = nextNode->prox;
     nextNode->prox = curr;
@@ -135,14 +123,28 @@ int insere_lista_ordenada(Lista* li, int valor) {
 
 // Teste
 
-int teste()
+int teste(Lista* lista)
 {
-    // testa com o numero sendo o ultimo
-    // printf(trocaNós(Lista*, 10));
-    // // testa com o primeiro
-    // printf(trocaNós(elemento*, 1));
-    // // testa caso não exista
-    // printf(trocaNós(struct elemento*, 80));
-
+    testa com o numero sendo o ultimo
+    printf(trocaNós(*Lista li, 10));
+    // testa com o primeiro
+    printf(trocaNós(*Lista li, 1));
+    // testa caso não exista
+    printf(trocaNós(*Lista li, 80));
     // Era pra chamar essa função e testas os casos, mas não sei o que errei.
+}
+
+
+int main()
+{
+    // criando a lista
+    Lista* lista = cria_lista();
+    // inserindo a lista
+    for (int i = 0; i < 10; i++)
+    {
+        insere_lista_ordenada(lista, inteiros[i]);
+    }
+
+    teste(Lista* lista);
+    return 0;
 }
