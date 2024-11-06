@@ -1,3 +1,5 @@
+
+
 void trocaNos(Lista* head, int n) {
     // Se a lista for vazia
     if (*head == NULL) {
