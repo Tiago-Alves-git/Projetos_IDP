@@ -1,10 +1,19 @@
 import ctypes
 import random
 import time
+import os
+
+import platform
+print(platform.architecture())
+
 
 
 # Carregar a biblioteca compilada em C
-lib = ctypes.CDLL(r'C:\Users\24101255\OneDrive - Instituto Brasileiro de Ensino, Desenvolvimento e Pesquisa (IDP)\Documentos\Tiago-GitHub\Projetos_IDP\Estrutura\Filas\fila_transplante.dll')
+current_directory = os.path.dirname(os.path.abspath(__file__))
+
+dll_path = os.path.join(current_directory, 'fila_transplante.dll')
+
+lib = ctypes.CDLL(dll_path)
 
 # Definir as funções e estruturas de dados
 lib.criaFila.restype = ctypes.POINTER(ctypes.c_void_p)
