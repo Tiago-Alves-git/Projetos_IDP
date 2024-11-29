@@ -1,21 +1,8 @@
-#include <stdio.h>
-#include <string.h>
+#include "grafo_cidades.h"
 
-#define MAX_CIDADES 27
-#define INF 99999
-
-// Estrutura para o Grafo
-typedef struct {
-    char cidades[MAX_CIDADES][50];
-    int matriz_adj[MAX_CIDADES][MAX_CIDADES];
-    int total_cidades;
-} Grafo;
-
-// Inicializa o grafo com as cidades
 void inicializar_grafo(Grafo *grafo) {
     grafo->total_cidades = 0;
 
-    // Inicializa a matriz de adjacência com infinito
     for (int i = 0; i < MAX_CIDADES; i++) {
         for (int j = 0; j < MAX_CIDADES; j++) {
             grafo->matriz_adj[i][j] = (i == j) ? 0 : INF;
@@ -23,13 +10,15 @@ void inicializar_grafo(Grafo *grafo) {
     }
 }
 
-// Adiciona uma cidade ao grafo
 int adicionar_cidade(Grafo *grafo, const char *cidade) {
     strcpy(grafo->cidades[grafo->total_cidades], cidade);
     return grafo->total_cidades++;
 }
 
-// Retorna o índice de uma cidade no grafo
+int comparar(const void *a, const void *b) {
+    return ((No*)a)->distancia - ((No*)b)->distancia;
+}
+
 int obter_indice(Grafo *grafo, const char *cidade) {
     for (int i = 0; i < grafo->total_cidades; i++) {
         if (strcmp(grafo->cidades[i], cidade) == 0) {
@@ -39,7 +28,6 @@ int obter_indice(Grafo *grafo, const char *cidade) {
     return -1;
 }
 
-// Adiciona uma aresta entre duas cidades com peso (distância)
 void adicionar_aresta(Grafo *grafo, const char *origem, const char *destino, int peso) {
     int indice_origem = obter_indice(grafo, origem);
     int indice_destino = obter_indice(grafo, destino);
@@ -47,7 +35,6 @@ void adicionar_aresta(Grafo *grafo, const char *origem, const char *destino, int
     grafo->matriz_adj[indice_destino][indice_origem] = peso; // Grafo não direcionado
 }
 
-// Exibe o grafo
 void exibir_grafo(Grafo *grafo) {
     printf("Grafo de Capitais Brasileiras (Matriz de Adjacência):\n");
     for (int i = 0; i < grafo->total_cidades; i++) {
@@ -93,7 +80,6 @@ void carregar_distancias(Grafo *grafo) {
     adicionar_cidade(grafo, "Florianópolis");
     adicionar_cidade(grafo, "Porto Alegre");
 
-    // Adiciona as arestas (distâncias reais em km)
     adicionar_aresta(grafo, "Rio Branco", "Manaus", 1448);
     adicionar_aresta(grafo, "Rio Branco", "Porto Velho", 540);
     adicionar_aresta(grafo, "Manaus", "Boa Vista", 785);
@@ -122,3 +108,47 @@ void carregar_distancias(Grafo *grafo) {
     adicionar_aresta(grafo, "Vitória", "Belo Horizonte", 524);
 }
 
+void dijkstra(Grafo *grafo, int origem, int destino) {
+    int dist[MAX_CIDADES];  // Distância mínima de origem até cada cidade
+    int prev[MAX_CIDADES];  // Para armazenar o caminho
+    int visitado[MAX_CIDADES] = {0};  // Marca cidades visitadas
+
+    for (int i = 0; i < grafo->total_cidades; i++) {
+        dist[i] = INF;
+        prev[i] = -1;
+    }
+    dist[origem] = 0;
+
+    for (int i = 0; i < grafo->total_cidades; i++) {
+        int u = -1;
+        for (int j = 0; j < grafo->total_cidades; j++) {
+            if (!visitado[j] && (u == -1 || dist[j] < dist[u])) {
+                u = j;
+            }
+        }
+
+        if (dist[u] == INF) break;  // Se a cidade mais próxima tem distância infinita, pare
+
+        visitado[u] = 1;
+
+        for (int v = 0; v < grafo->total_cidades; v++) {
+            if (grafo->matriz_adj[u][v] != INF && dist[u] + grafo->matriz_adj[u][v] < dist[v]) {
+                dist[v] = dist[u] + grafo->matriz_adj[u][v];
+                prev[v] = u;
+            }
+        }
+    }
+
+    if (dist[destino] == INF) {
+        printf("Não há caminho entre %s e %s.\n", grafo->cidades[origem], grafo->cidades[destino]);
+        return;
+    }
+
+    printf("Menor caminho de %s a %s: ", grafo->cidades[origem], grafo->cidades[destino]);
+    int cidade_atual = destino;
+    while (cidade_atual != -1) {
+        printf("%s <- ", grafo->cidades[cidade_atual]);
+        cidade_atual = prev[cidade_atual];
+    }
+    printf("Distância total: %d km\n", dist[destino]);
+}
