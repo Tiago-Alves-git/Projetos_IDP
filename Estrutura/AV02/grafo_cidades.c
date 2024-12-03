@@ -1,4 +1,6 @@
 #include "grafo_cidades.h"
+#include "config.h"
+
 
 void inicializar_grafo(Grafo *grafo) {
     grafo->total_cidades = 0;
