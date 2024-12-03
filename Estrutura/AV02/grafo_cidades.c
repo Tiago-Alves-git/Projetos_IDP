@@ -110,7 +110,7 @@ void carregar_distancias(Grafo *grafo) {
     adicionar_aresta(grafo, "Vitória", "Belo Horizonte", 524);
 }
 
-void dijkstra(Grafo *grafo, int origem, int destino) {
+int dijkstra(Grafo *grafo, int origem, int destino) {
     int dist[MAX_CIDADES];  // Distância mínima de origem até cada cidade
     int prev[MAX_CIDADES];  // Para armazenar o caminho
     int visitado[MAX_CIDADES] = {0};  // Marca cidades visitadas
@@ -153,4 +153,5 @@ void dijkstra(Grafo *grafo, int origem, int destino) {
         cidade_atual = prev[cidade_atual];
     }
     printf("Distância total: %d km\n", dist[destino]);
+    return %d;
 }

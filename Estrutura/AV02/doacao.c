@@ -23,16 +23,17 @@ void adicionar_doacao(const char *cidade_origem, const char *orgao,
     // Encontrar o CD mais próximo usando Dijkstra
     int cd_mais_proximo = -1;
     int menor_distancia = INF;
+    int destino;
 
     // Rodar Dijkstra para encontrar o CD mais próximo
     for (int i = 0; i < grafo->total_cidades; i++) {
         if (eh_cd(i)) {  // Verifique se é um CD (Centro de Doação)
             // Rodar Dijkstra de cidade_origem para i (CD)
-            dijkstra(grafo, origem_idx, i);
+            destino = dijkstra(grafo, origem_idx, i);
 
             // Verifique se a distância calculada para o CD é a menor
-            if (dist[i] < menor_distancia) {
-                menor_distancia = dist[i];
+            if (destino < menor_distancia) {
+                menor_distancia = destino;
                 cd_mais_proximo = i;
             }
         }
@@ -43,7 +44,6 @@ void adicionar_doacao(const char *cidade_origem, const char *orgao,
         return;
     }
 
-    // Adicionar a doação à estrutura correta de acordo com o tipo de órgão
     if (strcmp(orgao, "CORAÇÃO") == 0) {
         push(&pilhas[cd_mais_proximo], orgao);
     } else if (strcmp(orgao, "MEDULA") == 0 || strcmp(orgao, "CÓRNEA") == 0) {
@@ -53,10 +53,8 @@ void adicionar_doacao(const char *cidade_origem, const char *orgao,
         return;
     }
 
-    // Adicionar à lista global
     adicionar_na_lista_global(lista_global, orgao, cidade_origem, "Em espera para transplante");
 
-    // Mensagem de sucesso
     printf("Doação adicionada com sucesso!\n");
 }
 
