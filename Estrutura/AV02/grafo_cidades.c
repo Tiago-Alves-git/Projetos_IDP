@@ -111,9 +111,9 @@ void carregar_distancias(Grafo *grafo) {
 }
 
 int dijkstra(Grafo *grafo, int origem, int destino) {
-    int dist[MAX_CIDADES];  // Distância mínima de origem até cada cidade
-    int prev[MAX_CIDADES];  // Para armazenar o caminho
-    int visitado[MAX_CIDADES] = {0};  // Marca cidades visitadas
+    int dist[MAX_CIDADES];  
+    int prev[MAX_CIDADES];  
+    int visitado[MAX_CIDADES] = {0}; 
 
     for (int i = 0; i < grafo->total_cidades; i++) {
         dist[i] = INF;
@@ -143,18 +143,21 @@ int dijkstra(Grafo *grafo, int origem, int destino) {
 
     if (dist[destino] == INF) {
         printf("Não há caminho entre %s e %s.\n", grafo->cidades[origem], grafo->cidades[destino]);
-        return INF;  // Indica que não há caminho válido
+        return INF;
     }
 
-    // Opcional: imprimir o caminho
     printf("Menor caminho de %s a %s: ", grafo->cidades[origem], grafo->cidades[destino]);
     int cidade_atual = destino;
+    int num_nos = 0; 
     while (cidade_atual != -1) {
         printf("%s <- ", grafo->cidades[cidade_atual]);
         cidade_atual = prev[cidade_atual];
+        num_nos++;
     }
     printf("\nDistância total: %d km\n", dist[destino]);
+    printf("Número de nós no caminho: %d\n", num_nos);
 
     return dist[destino];  // Retorna a distância mínima como int
 }
+
 

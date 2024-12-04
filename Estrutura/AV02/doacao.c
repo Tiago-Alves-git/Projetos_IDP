@@ -23,15 +23,21 @@ void adicionar_doacao(const char *cidade_origem, const char *orgao,
 
     for (int i = 0; i < grafo->total_cidades; i++)
     {
-        if (eh_cd(i))
-        { // Verifique se é um CD (Centro de Doação)
+        if (eh_cd(i)) // Verifique se é um CD (Centro de Doação)
+        {
             int distancia = dijkstra(grafo, origem_idx, i);
+
+            // Chamada adicional para o DFS e BFS
+            int cd_dfs = encontrar_cd_dfs(cidade_origem, grafo->matriz_adj, grafo->cidades[i], grafo);
+            int cd_bfs = encontrar_cd_bfs(cidade_origem, grafo->matriz_adj, grafo);
 
             if (distancia != INF && distancia < menor_distancia)
             {
                 menor_distancia = distancia;
                 cd_mais_proximo = i;
             }
+
+            printf("DFS encontrou CD: %d, BFS encontrou CD: %d\n", cd_dfs, cd_bfs); // Debug
         }
     }
 
@@ -44,7 +50,7 @@ void adicionar_doacao(const char *cidade_origem, const char *orgao,
     char tipo[50];
     printf("Digite o tipo de órgão (CORACAO, MEDULA, CORNEA): ");
     scanf("%49[^\n]", tipo);
-    tipo[strcspn(tipo, "\n")] = '\0';       // Limpa a string de caracteres extras
+    tipo[strcspn(tipo, "\n")] = '\0'; // Limpa a string de caracteres extras
     printf("Entrada recebida: %s\n", tipo); // Debug da entrada
 
     // Adicionar o órgão à estrutura correta
@@ -66,6 +72,7 @@ void adicionar_doacao(const char *cidade_origem, const char *orgao,
     printf("Doacao adicionada com sucesso! CD mais proximo: %s. Distancia: %d km\n",
            grafo->cidades[cd_mais_proximo], menor_distancia);
 }
+
 
 void processar_doacao(const char *orgao, Pilha pilhas[], Fila filas[],
                       ListaGlobal *lista_global)
