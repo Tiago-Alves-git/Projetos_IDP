@@ -6,13 +6,14 @@
 #include "config.h"
 #include "cd.h"
 
-
-void adicionar_doacao(const char *cidade_origem, const char *orgao, 
-                      Pilha pilhas[], Fila filas[], ListaGlobal *lista_global, Grafo *grafo) {
+void adicionar_doacao(const char *cidade_origem, const char *orgao,
+                      Pilha pilhas[], Fila filas[], ListaGlobal *lista_global, Grafo *grafo)
+{
     // Obter o índice da cidade de origem
     int origem_idx = obter_indice(grafo, cidade_origem);
-    if (origem_idx == -1) {
-        printf("Cidade de origem inválida.\n");
+    if (origem_idx == -1)
+    {
+        printf("Cidade de origem invalida.\n");
         return;
     }
 
@@ -20,68 +21,94 @@ void adicionar_doacao(const char *cidade_origem, const char *orgao,
     int cd_mais_proximo = -1;
     int menor_distancia = INF;
 
-    for (int i = 0; i < grafo->total_cidades; i++) {
-        if (eh_cd(i)) {  // Verifique se é um CD (Centro de Doação)
+    for (int i = 0; i < grafo->total_cidades; i++)
+    {
+        if (eh_cd(i))
+        { // Verifique se é um CD (Centro de Doação)
             int distancia = dijkstra(grafo, origem_idx, i);
 
-            if (distancia != INF && distancia < menor_distancia) {
+            if (distancia != INF && distancia < menor_distancia)
+            {
                 menor_distancia = distancia;
                 cd_mais_proximo = i;
             }
         }
     }
 
-    if (cd_mais_proximo == -1) {
-        printf("Não foi possível encontrar um CD válido ou acessível.\n");
+    if (cd_mais_proximo == -1)
+    {
+        printf("Nao foi possível encontrar um CD valido ou acessivel.\n");
         return;
     }
 
+    char tipo[50];
+    printf("Digite o tipo de órgão (CORACAO, MEDULA, CORNEA): ");
+    scanf("%49[^\n]", tipo);
+    tipo[strcspn(tipo, "\n")] = '\0';       // Limpa a string de caracteres extras
+    printf("Entrada recebida: %s\n", tipo); // Debug da entrada
+
+    if (strcmp(tipo, "CORACAO") == 0)
+    {
+        printf("Orgao CORACAO reconhecido com sucesso!\n");
+    }
+    else
+    {
+        printf("Tipo de orgão invalido: %s\n", tipo);
+    }
+
     // Adicionar o órgão à estrutura correta
-    if (strcmp(orgao, "CORAÇÃO") == 0) {
+    if (strcmp(orgao, "CORACAO") == 0)
+    {
         push(&pilhas[cd_mais_proximo], orgao);
-    } else if (strcmp(orgao, "MEDULA") == 0 || strcmp(orgao, "CÓRNEA") == 0) {
+    }
+    else if (strcmp(orgao, "MEDULA") == 0 || strcmp(orgao, "CORNEA") == 0)
+    {
         enqueue(&filas[cd_mais_proximo], orgao);
-    } else {
-        printf("Tipo de órgão inválido!\n");
+    }
+    else
+    {
+        printf("Tipo de orgao invalido!\n");
         return;
     }
 
     adicionar_na_lista_global(lista_global, orgao, cidade_origem, "Em espera para transplante");
-    printf("Doação adicionada com sucesso! CD mais próximo: %s. Distância: %d km\n", 
+    printf("Doacao adicionada com sucesso! CD mais proximo: %s. Distancia: %d km\n",
            grafo->cidades[cd_mais_proximo], menor_distancia);
 }
 
+void processar_doacao(const char *orgao, Pilha pilhas[], Fila filas[],
+                      ListaGlobal *lista_global)
+{
+    printf("Iniciando processamento da doação para o orgao: %s\n", orgao);
 
-
-
-
-
-void processar_doacao(const char *orgao, Pilha pilhas[], Fila filas[], 
-                      ListaGlobal *lista_global) {
-    printf("Iniciando processamento da doação para o órgão: %s\n", orgao);
-
-    for (int i = 0; i < MAX_CDS; i++) {
+    for (int i = 0; i < MAX_CDS; i++)
+    {
         char *orgao_transplantado = NULL;
 
-        if (strcmp(orgao, "CORAÇÃO") == 0) {
-            if (!pilha_vazia(&pilhas[i])) {
+        if (strcmp(orgao, "CORACAO") == 0)
+        {
+            if (!pilha_vazia(&pilhas[i]))
+            {
                 orgao_transplantado = pop(&pilhas[i]);
-                printf("CORAÇÃO retirado da pilha do CD %d.\n", i + 1);
+                printf("CORACAO retirado da pilha do CD %d.\n", i + 1);
             }
-        } else {
-            if (!fila_vazia(&filas[i])) {
+        }
+        else
+        {
+            if (!fila_vazia(&filas[i]))
+            {
                 orgao_transplantado = dequeue(&filas[i]);
                 printf("%s retirado da fila do CD %d.\n", orgao, i + 1);
             }
         }
 
-        if (orgao_transplantado) {
-            atualizar_status(lista_global, orgao_transplantado, "Órgão transplantado");
-            printf("Órgão %s transplantado com sucesso do CD %d!\n", orgao, i + 1);
+        if (orgao_transplantado)
+        {
+            atualizar_status(lista_global, orgao_transplantado, "Orgao transplantado");
+            printf("Orgao %s transplantado com sucesso do CD %d!\n", orgao, i + 1);
             return;
         }
     }
 
-    printf("Nenhum órgão disponível para transplante.\n");
+    printf("Nenhum orgao disponivel para transplante.\n");
 }
-

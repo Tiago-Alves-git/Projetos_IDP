@@ -16,6 +16,7 @@ int eh_cd(int cidade_idx)
     {
         if (cds[i] == cidade_idx)
         {
+            printf("Cidade verificada: %d\n", cidade_idx);
             return 1; // A cidade é um CD
         }
     }
