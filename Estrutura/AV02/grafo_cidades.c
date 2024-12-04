@@ -129,7 +129,7 @@ int dijkstra(Grafo *grafo, int origem, int destino) {
             }
         }
 
-        if (dist[u] == INF) break;  // Se a cidade mais próxima tem distância infinita, pare
+        if (u == -1 || dist[u] == INF) break;  // Nenhum vértice acessível restante
 
         visitado[u] = 1;
 
@@ -143,15 +143,18 @@ int dijkstra(Grafo *grafo, int origem, int destino) {
 
     if (dist[destino] == INF) {
         printf("Não há caminho entre %s e %s.\n", grafo->cidades[origem], grafo->cidades[destino]);
-        return;
+        return INF;  // Indica que não há caminho válido
     }
 
+    // Opcional: imprimir o caminho
     printf("Menor caminho de %s a %s: ", grafo->cidades[origem], grafo->cidades[destino]);
     int cidade_atual = destino;
     while (cidade_atual != -1) {
         printf("%s <- ", grafo->cidades[cidade_atual]);
         cidade_atual = prev[cidade_atual];
     }
-    printf("Distância total: %d km\n", dist[destino]);
-    return %d;
+    printf("\nDistância total: %d km\n", dist[destino]);
+
+    return dist[destino];  // Retorna a distância mínima como int
 }
+

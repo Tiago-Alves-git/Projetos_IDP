@@ -5,9 +5,9 @@
 #include "pilha.h"
 #include "fila.h"
 #include "lista.h"
-#include "doacao.c"
+#include "doacao.h"
 #include "dfs.h"
-#include "relatorio.c"
+#include "relatorio.h"
 #include "config.h"
 #include "cd.h"
 
@@ -62,7 +62,7 @@ int main()
             printf("Digite o tipo de órgão (CORAÇÃO, MEDULA, CÓRNEA): ");
             scanf("%s", tipo);
 
-            adicionar_doacao(origem, tipo, pilhas, filas, &lista_global, grafo.matriz_adj, &grafo);
+            adicionar_doacao(origem, tipo, pilhas, filas, &lista_global, &grafo);
             break;
         }
 

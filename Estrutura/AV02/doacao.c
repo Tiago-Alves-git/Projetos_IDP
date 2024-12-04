@@ -8,8 +8,7 @@
 
 
 void adicionar_doacao(const char *cidade_origem, const char *orgao, 
-                      Pilha pilhas[], Fila filas[], ListaGlobal *lista_global, 
-                      int matriz_adjacencia[MAX_CIDADES][MAX_CIDADES], Grafo *grafo) {
+                      Pilha pilhas[], Fila filas[], ListaGlobal *lista_global, Grafo *grafo) {
     // Obter o índice da cidade de origem
     int origem_idx = obter_indice(grafo, cidade_origem);
     if (origem_idx == -1) {
@@ -17,33 +16,27 @@ void adicionar_doacao(const char *cidade_origem, const char *orgao,
         return;
     }
 
-    // Declarar o vetor de distâncias
-    int dist[MAX_CIDADES];
-
     // Encontrar o CD mais próximo usando Dijkstra
     int cd_mais_proximo = -1;
     int menor_distancia = INF;
-    int destino;
 
-    // Rodar Dijkstra para encontrar o CD mais próximo
     for (int i = 0; i < grafo->total_cidades; i++) {
         if (eh_cd(i)) {  // Verifique se é um CD (Centro de Doação)
-            // Rodar Dijkstra de cidade_origem para i (CD)
-            destino = dijkstra(grafo, origem_idx, i);
+            int distancia = dijkstra(grafo, origem_idx, i);
 
-            // Verifique se a distância calculada para o CD é a menor
-            if (destino < menor_distancia) {
-                menor_distancia = destino;
+            if (distancia != INF && distancia < menor_distancia) {
+                menor_distancia = distancia;
                 cd_mais_proximo = i;
             }
         }
     }
 
     if (cd_mais_proximo == -1) {
-        printf("Não foi possível encontrar um CD válido.\n");
+        printf("Não foi possível encontrar um CD válido ou acessível.\n");
         return;
     }
 
+    // Adicionar o órgão à estrutura correta
     if (strcmp(orgao, "CORAÇÃO") == 0) {
         push(&pilhas[cd_mais_proximo], orgao);
     } else if (strcmp(orgao, "MEDULA") == 0 || strcmp(orgao, "CÓRNEA") == 0) {
@@ -54,9 +47,10 @@ void adicionar_doacao(const char *cidade_origem, const char *orgao,
     }
 
     adicionar_na_lista_global(lista_global, orgao, cidade_origem, "Em espera para transplante");
-
-    printf("Doação adicionada com sucesso!\n");
+    printf("Doação adicionada com sucesso! CD mais próximo: %s. Distância: %d km\n", 
+           grafo->cidades[cd_mais_proximo], menor_distancia);
 }
+
 
 
 

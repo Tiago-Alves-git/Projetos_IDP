@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/Tiago/Documents/Tiago-Alves/Idp-Codes/Projetos_IDP/Projetos_IDP/Estrutura/AV02",
-      "program": "c:/Users/Tiago/Documents/Tiago-Alves/Idp-Codes/Projetos_IDP/Projetos_IDP/Estrutura/AV02/build/Debug/outDebug",
+      "cwd": "c:/Users/24101255/Documents/Tiago-Alves-Git/Projetos_IDP/Estrutura/AV02",
+      "program": "c:/Users/24101255/Documents/Tiago-Alves-Git/Projetos_IDP/Estrutura/AV02/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
