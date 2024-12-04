@@ -55,26 +55,26 @@ void exibir_grafo(Grafo *grafo) {
 void carregar_distancias(Grafo *grafo) {
     // Adiciona todas as cidades
     adicionar_cidade(grafo, "Rio Branco");
+    adicionar_cidade(grafo, "Fortaleza");
+    adicionar_cidade(grafo, "Brasília");
+    adicionar_cidade(grafo, "São Paulo");
     adicionar_cidade(grafo, "Manaus");
     adicionar_cidade(grafo, "Porto Velho");
     adicionar_cidade(grafo, "Boa Vista");
     adicionar_cidade(grafo, "Belém");
     adicionar_cidade(grafo, "Macapá");
     adicionar_cidade(grafo, "São Luís");
-    adicionar_cidade(grafo, "Fortaleza");
     adicionar_cidade(grafo, "Natal");
     adicionar_cidade(grafo, "João Pessoa");
     adicionar_cidade(grafo, "Recife");
     adicionar_cidade(grafo, "Maceió");
     adicionar_cidade(grafo, "Aracaju");
     adicionar_cidade(grafo, "Salvador");
-    adicionar_cidade(grafo, "Brasília");
     adicionar_cidade(grafo, "Palmas");
     adicionar_cidade(grafo, "Teresina");
     adicionar_cidade(grafo, "Goiânia");
     adicionar_cidade(grafo, "Campo Grande");
     adicionar_cidade(grafo, "Cuiabá");
-    adicionar_cidade(grafo, "São Paulo");
     adicionar_cidade(grafo, "Belo Horizonte");
     adicionar_cidade(grafo, "Vitória");
     adicionar_cidade(grafo, "Rio de Janeiro");

@@ -47,15 +47,6 @@ void adicionar_doacao(const char *cidade_origem, const char *orgao,
     tipo[strcspn(tipo, "\n")] = '\0';       // Limpa a string de caracteres extras
     printf("Entrada recebida: %s\n", tipo); // Debug da entrada
 
-    if (strcmp(tipo, "CORACAO") == 0)
-    {
-        printf("Orgao CORACAO reconhecido com sucesso!\n");
-    }
-    else
-    {
-        printf("Tipo de orgão invalido: %s\n", tipo);
-    }
-
     // Adicionar o órgão à estrutura correta
     if (strcmp(orgao, "CORACAO") == 0)
     {
