@@ -8,8 +8,7 @@
 
 
 void adicionar_doacao(const char *cidade_origem, const char *orgao, 
-                      Pilha pilhas[], Fila filas[], ListaGlobal *lista_global, 
-                      int matriz_adjacencia[MAX_CIDADES][MAX_CIDADES], Grafo *grafo) {
+                      Pilha pilhas[], Fila filas[], ListaGlobal *lista_global, Grafo *grafo) {
     // Obter o índice da cidade de origem
     int origem_idx = obter_indice(grafo, cidade_origem);
     if (origem_idx == -1) {
@@ -18,7 +17,7 @@ void adicionar_doacao(const char *cidade_origem, const char *orgao,
     }
 
     // Declarar o vetor de distâncias
-    int dist[MAX_CIDADES];
+    int destino;
 
     // Encontrar o CD mais próximo usando Dijkstra
     int cd_mais_proximo = -1;
@@ -28,11 +27,11 @@ void adicionar_doacao(const char *cidade_origem, const char *orgao,
     for (int i = 0; i < grafo->total_cidades; i++) {
         if (eh_cd(i)) {  // Verifique se é um CD (Centro de Doação)
             // Rodar Dijkstra de cidade_origem para i (CD)
-            dijkstra(grafo, origem_idx, i);
+            destino = dijkstra(grafo, origem_idx, i);
 
             // Verifique se a distância calculada para o CD é a menor
-            if (dist[i] < menor_distancia) {
-                menor_distancia = dist[i];
+            if (destino < menor_distancia) {
+                menor_distancia = destino;
                 cd_mais_proximo = i;
             }
         }
