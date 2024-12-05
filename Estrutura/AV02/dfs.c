@@ -99,7 +99,7 @@ int encontrar_cd_dfs(const char *cidade_origem,
     }
     dist[cidade_origem_idx] = 0;
 
-    int resultado = dfs(cidade_origem_idx, matriz_adjacencia, visitado, cidade_destino_idx, prev, dist);
+    int resultado = dfs(cidade_origem_idx, matriz_adjacencia, visitado, cidade_destino_idx);
 
     // Se o caminho foi encontrado, imprime o caminho, a distância e o número de nós
     if (resultado != -1) {
