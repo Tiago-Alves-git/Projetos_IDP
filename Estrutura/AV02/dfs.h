@@ -30,6 +30,10 @@ int fila_vazia_bfs(FilaBFS *fila);
 // Funções para busca
 int dfs(int cidade_atual, int matriz_adj[MAX_CIDADES][MAX_CIDADES], int visitado[MAX_CIDADES], int destino);
 int encontrar_cd_dfs(const char *cidade_origem, int matriz_adjacencia[MAX_CIDADES][MAX_CIDADES], const char *cidade_destino, Grafo *grafo);
-int encontrar_cd_bfs(const char *cidade_origem, int matriz_adjacencia[MAX_CIDADES][MAX_CIDADES], const char *cidades[], int num_cidades, Grafo* grafo);
+// Função para encontrar a cidade de destino usando BFS
+int encontrar_cd_bfs(const char *cidade_origem, 
+                     int matriz_adjacencia[MAX_CIDADES][MAX_CIDADES], 
+                     Grafo *grafo);
+
 
 #endif

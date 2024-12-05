@@ -52,10 +52,14 @@ int fila_vazia_bfs(FilaBFS *fila) {
     return fila->frente == fila->tras;
 }
 
-int dfs(int cidade_atual, int matriz_adj[MAX_CIDADES][MAX_CIDADES], int visitado[MAX_CIDADES], int destino) {
-    visitado[cidade_atual] = 1;  // Marca a cidade como visitada
+int dfs(int cidade_atual, int matriz_adj[MAX_CIDADES][MAX_CIDADES], 
+        int visitado[MAX_CIDADES], int destino) {
+    visitado[cidade_atual] = 1;
+    printf("Visitando cidade: %d\n", cidade_atual);  // Imprime a cidade visitada
+
     if (cidade_atual == destino) {
-        return cidade_atual;  // Encontrou o destino
+        printf("Destino alcançado: %d\n", destino);
+        return cidade_atual;
     }
 
     for (int i = 0; i < MAX_CIDADES; i++) {
@@ -69,58 +73,124 @@ int dfs(int cidade_atual, int matriz_adj[MAX_CIDADES][MAX_CIDADES], int visitado
     return -1;
 }
 
+
+
+
+
 int encontrar_cd_dfs(const char *cidade_origem, 
                      int matriz_adjacencia[MAX_CIDADES][MAX_CIDADES], 
                      const char *cidade_destino, Grafo *grafo) {
-    // Usando obter_indice para pegar os índices das cidades
+
     int cidade_origem_idx = obter_indice(grafo, cidade_origem);
     int cidade_destino_idx = obter_indice(grafo, cidade_destino);
 
-    // Verificar se as cidades foram encontradas
     if (cidade_origem_idx == -1 || cidade_destino_idx == -1) {
         printf("Cidade não encontrada.\n");
-        return -1; // Ou outro valor de erro adequado
+        return -1;
     }
 
     int visitado[MAX_CIDADES] = {0};
-    return dfs(cidade_origem_idx, matriz_adjacencia, visitado, cidade_destino_idx);
+    int prev[MAX_CIDADES];
+    int dist[MAX_CIDADES];
+    
+    for (int i = 0; i < MAX_CIDADES; i++) {
+        prev[i] = -1;  // Inicializa os anteriores como -1
+        dist[i] = INF; // Inicializa as distâncias com valor muito alto
+    }
+    dist[cidade_origem_idx] = 0;
+
+    int resultado = dfs(cidade_origem_idx, matriz_adjacencia, visitado, cidade_destino_idx, prev, dist);
+
+    // Se o caminho foi encontrado, imprime o caminho, a distância e o número de nós
+    if (resultado != -1) {
+        printf("Menor caminho de %s a %s: ", grafo->cidades[cidade_origem_idx], grafo->cidades[cidade_destino_idx]);
+        
+        int cidade_atual = cidade_destino_idx;
+        int num_nos = 0;
+        while (cidade_atual != -1) {
+            printf("%s <- ", grafo->cidades[cidade_atual]);
+            cidade_atual = prev[cidade_atual];
+            num_nos++;
+        }
+        
+        printf("\nDistância total: %d km\n", dist[cidade_destino_idx]);
+        printf("Número de nós no caminho: %d\n", num_nos);
+    }
+
+    return resultado;
 }
 
 
-int encontrar_cd_bfs(const char *cidade_origem, 
-                     int matriz_adjacencia[MAX_CIDADES][MAX_CIDADES], 
-                     Grafo* grafo) {
-    // Usando obter_indice para pegar o índice da cidade de origem
+
+
+int encontrar_cd_bfs(const char *cidade_origem,
+                     int matriz_adjacencia[MAX_CIDADES][MAX_CIDADES],
+                     Grafo *grafo) {
+
+    int visitados[MAX_CIDADES] = {0};
+    int prev[MAX_CIDADES];    // Para armazenar o caminho
+    int dist[MAX_CIDADES];    // Para armazenar as distâncias
     int origem_idx = obter_indice(grafo, cidade_origem);
 
     if (origem_idx == -1) {
         printf("Cidade de origem inválida.\n");
-        return -1; // Ou outro valor de erro adequado
+        return -1;
     }
+
+    // Inicializa os vetores
+    for (int i = 0; i < MAX_CIDADES; i++) {
+        prev[i] = -1; // Nenhuma cidade foi visitada inicialmente
+        dist[i] = INF; // Inicializa as distâncias como um valor alto (infinito)
+    }
+    dist[origem_idx] = 0;  // A distância da cidade de origem para ela mesma é 0
 
     FilaBFS fila;
     inicializar_fila_bfs(&fila);
     enqueue_bfs(&fila, origem_idx);
-    int visitados[MAX_CIDADES] = {0};
     visitados[origem_idx] = 1;
+
+    static int num_visitados = 0;  // Variável para contar o número de grafos visitados
+
+    printf("Iniciando BFS da cidade: %d\n", origem_idx);
 
     while (!fila_vazia_bfs(&fila)) {
         int atual = dequeue_bfs(&fila);
+        num_visitados++;  // Incrementa o número de grafos visitados
+        printf("Visitando cidade: %d\n", atual);
 
-        // Verificar se o nó atual é um CD
         if (eh_cd(atual)) {
+            printf("Centro de Doação encontrado: %d\n", atual);
+            printf("Número total de grafos visitados (BFS): %d\n", num_visitados);
+
+            // Imprimir o caminho e a distância
+            printf("Menor caminho de %s a %s: ", grafo->cidades[origem_idx], grafo->cidades[atual]);
+            int cidade_atual = atual;
+            int num_nos = 0;
+
+            // Imprime o caminho da origem ao destino
+            while (cidade_atual != -1) {
+                printf("%s <- ", grafo->cidades[cidade_atual]);
+                cidade_atual = prev[cidade_atual];
+                num_nos++;
+            }
+
+            printf("\nDistância total: %d km\n", dist[atual]);
+            printf("Número de nós no caminho: %d\n", num_nos);
+
             return atual;
         }
 
-        // Adicionar vizinhos não visitados à fila
         for (int i = 0; i < grafo->total_cidades; i++) {
             if (matriz_adjacencia[atual][i] && !visitados[i]) {
                 enqueue_bfs(&fila, i);
                 visitados[i] = 1;
+                prev[i] = atual;  // Armazena o nó anterior
+                dist[i] = dist[atual] + matriz_adjacencia[atual][i];  // Atualiza a distância
             }
         }
     }
 
-    return -1; // Caso nenhum CD seja encontrado
-}
+    printf("Número total de grafos visitados (BFS): %d\n", num_visitados);
 
+    return -1;
+}

@@ -5,9 +5,9 @@
 #include "pilha.h"
 #include "fila.h"
 #include "lista.h"
-#include "doacao.c"
+#include "doacao.h"
 #include "dfs.h"
-#include "relatorio.c"
+#include "relatorio.h"
 #include "config.h"
 #include "cd.h"
 
@@ -59,7 +59,7 @@ int main()
             char origem[50], tipo[10];
             printf("Digite a capital de origem: ");
             scanf("%s", origem);
-            printf("Digite o tipo de órgão (CORAÇÃO, MEDULA, CÓRNEA): ");
+            printf("Digite o tipo de orgao (CORACAO, MEDULA, CORNEA): ");
             scanf("%s", tipo);
 
             adicionar_doacao(origem, tipo, pilhas, filas, &lista_global, &grafo);
@@ -69,7 +69,7 @@ int main()
         case 2:
         {
             char tipo[10];
-            printf("Digite o tipo de órgão a processar (CORAÇÃO, MEDULA, CÓRNEA): ");
+            printf("Digite o tipo de órgão a processar (CORACAO, MEDULA, CORNEA): ");
             scanf("%s", tipo);
 
             processar_doacao(tipo, pilhas, filas, &lista_global);
@@ -90,7 +90,7 @@ int main()
             break;
 
         default:
-            printf("Opção inválida!\n");
+            printf("Opção invalida!\n");
         }
     } while (opcao != 4);
 

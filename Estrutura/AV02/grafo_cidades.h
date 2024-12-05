@@ -26,6 +26,6 @@ int obter_indice(Grafo *grafo, const char *cidade);              // Obtém o ín
 void adicionar_aresta(Grafo *grafo, const char *origem, const char *destino, int peso);  // Adiciona uma aresta entre duas cidades
 void exibir_grafo(Grafo *grafo);                                  // Exibe o grafo (matriz de adjacência)
 void carregar_distancias(Grafo *grafo);                           // Carrega as cidades e distâncias no grafo
-void dijkstra(Grafo *grafo, int origem, int destino);             // Executa o algoritmo de Dijkstra para encontrar o caminho mais curto entre duas cidades
+int dijkstra(Grafo *grafo, int origem, int destino);             // Executa o algoritmo de Dijkstra para encontrar o caminho mais curto entre duas cidades
 
 #endif

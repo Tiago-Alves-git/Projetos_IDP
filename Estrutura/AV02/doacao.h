@@ -10,8 +10,7 @@
 #include "cd.h"
 
 void adicionar_doacao(const char *cidade_origem, const char *orgao, 
-                      Pilha pilhas[], Fila filas[], ListaGlobal *lista_global, 
-                      int matriz_adjacencia[MAX_CIDADES][MAX_CIDADES]);
+                      Pilha pilhas[], Fila filas[], ListaGlobal *lista_global, Grafo *grafo);
 
 void processar_doacao(const char *orgao, Pilha pilhas[], Fila filas[], 
                       ListaGlobal *lista_global);
