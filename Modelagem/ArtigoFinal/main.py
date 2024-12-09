@@ -4,10 +4,11 @@ from data.data_preprocessing import preprocess_club_data, data_preprocessing_gam
 from analysis.game_analysis import game_summary
 from analysis.player_analysis import player_stats, analyze_goals_by_players
 from analysis.valuation_analysis import player_valuation
-from utils.plotter import plot_market_trend, plot_top_players, plot_result_distribution, plot_annual_attendance_trend, plot_home_away_performance, plot_game_summary, plot_correlation ,calculate_and_plot_correlation , calculate_and_plot_goals_correlation
+from utils.plotter import plot_market_trend, plot_top_players, plot_result_distribution, plot_annual_attendance_trend, plot_home_away_performance, plot_game_summary, plot_correlation ,calculate_and_plot_correlation , calculate_and_plot_goals_correlation , plot_valuation_goals_correlation
 from analysis.market_trend import analyze_team_valuation, prepare_market_trend
 from analysis.attendance_year import analyze_attendance_by_year
 from analysis.season_summary import analyze_performance_by_year
+from analysis.player_valuation_goals import calculate_player_valuation_and_goals
 
 def main():
     # Carregar os dados
@@ -32,6 +33,8 @@ def main():
 
     # Análise de desempenho por ano
     performance_data = analyze_performance_by_year(chelsea_games)
+    
+    player_data = calculate_player_valuation_and_goals(chelsea_player_valuations, chelsea_appearances, players)
 
     game_summary_data = game_summary(chelsea_games)
 
@@ -45,6 +48,7 @@ def main():
     plot_correlation(chelsea_games, chelsea_valuation_in_year)
     calculate_and_plot_correlation(chelsea_valuation_in_year, chelsea_titles_in_year)
     calculate_and_plot_goals_correlation(chelsea_valuation_in_year, chelsea_games)
+    plot_valuation_goals_correlation(player_data)
 
 
 if __name__ == '__main__':

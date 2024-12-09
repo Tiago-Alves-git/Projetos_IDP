@@ -16,10 +16,16 @@ def preprocess_club_data(clubs, club_games, appearances, player_valuations, play
     chelsea_games['is_loss'] = chelsea_games['own_goals'] < chelsea_games['opponent_goals']
     chelsea_games['is_draw'] = chelsea_games['own_goals'] == chelsea_games['opponent_goals']
 
-    chelsea_appearances = appearances[appearances['player_club_id'] == chelsea_id]
-
-    chelsea_player_valuations = player_valuations[player_valuations['current_club_id'] == chelsea_id]
-
+# Aparições de jogadores do Chelsea, incluindo a data
+    chelsea_appearances = appearances[appearances['player_club_id'] == chelsea_id][[
+        'appearance_id', 'game_id', 'player_id', 'player_club_id', 'date', 'player_name',
+        'yellow_cards', 'red_cards', 'goals', 'assists', 'minutes_played'
+    ]]
+    
+    # Valores de mercado dos jogadores do Chelsea, incluindo a data
+    chelsea_player_valuations = player_valuations[
+        player_valuations['current_club_id'] == chelsea_id
+    ][['player_id', 'date', 'market_value_in_eur', 'current_club_id']]
     chelsea_players = players[players['current_club_id'] == chelsea_id]
 
     chelsea_info = clubs[clubs['club_id'] == chelsea_id]

@@ -228,3 +228,28 @@ def calculate_and_plot_goals_correlation(valuation_data, chelsea_games):
 
     # Exibir o gráfico
     plt.show()
+    
+def plot_valuation_goals_correlation(player_data):
+    """
+    Plota a correlação entre o valor médio de mercado dos jogadores e o número de gols.
+    """
+    # Calcular a correlação de Pearson
+    correlation, _ = pearsonr(player_data['avg_market_value'], player_data['total_goals'])
+
+    # Criar o gráfico de dispersão
+    plt.figure(figsize=(10, 6))
+    sns.regplot(
+        data=player_data,
+        x='total_goals',
+        y='avg_market_value',
+        color='green',
+        line_kws={"color": "red", "alpha": 0.7, "lw": 2}
+    )
+    plt.title(f'Correlação entre Valor de Mercado Médio e Gols\nCorrelação de Pearson: {correlation:.2f}')
+    plt.xlabel('Total de Gols (por ano)')
+    plt.ylabel('Valor Médio de Mercado (€)')
+    plt.grid(True)
+    plt.tight_layout()
+
+    # Exibir o gráfico
+    plt.show()
