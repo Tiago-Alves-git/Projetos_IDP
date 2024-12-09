@@ -48,14 +48,14 @@ def plot_top_players(chelsea_player_stats):
     plt.tight_layout()
     plt.show()
 
-def plot_game_summary(game_summary):
+def plot_game_summary(summary):
     """
-    Plota gráficos de desempenho do Chelsea por jogos.
+    Plota gráficos de desempenho do Chelsea por jogos a partir do resumo (dicionário).
     """
     # Gráfico de barras para vitórias, empates e derrotas
     game_summary_data = {
         'Categoria': ['Vitórias', 'Empates', 'Derrotas'],
-        'Jogos': [game_summary['wins'].sum(), game_summary['draws'].sum(), game_summary['losses'].sum()]
+        'Jogos': [summary['Vitórias'], summary['Empates'], summary['Derrotas']]
     }
     game_summary_df = pd.DataFrame(game_summary_data)
 
@@ -69,7 +69,7 @@ def plot_game_summary(game_summary):
     # Gráfico de barras para gols marcados e sofridos
     goals_data = {
         'Categoria': ['Gols Marcados', 'Gols Sofridos'],
-        'Gols': [game_summary['total_goals'].sum(), game_summary['total_goals_conceded'].sum()]
+        'Gols': [summary['Média de Gols Marcados'], summary['Média de Gols Sofridos']]
     }
     goals_df = pd.DataFrame(goals_data)
 
@@ -82,10 +82,7 @@ def plot_game_summary(game_summary):
 
 def plot_result_distribution(summary):
     """
-    Plota a distribuição de vitórias, empates e derrotas.
-    
-    Parâmetros:
-    - summary (dict): Dicionário com métricas do desempenho.
+    Plota a distribuição de vitórias, empates e derrotas a partir do resumo (dicionário).
     """
     results = ['Vitórias', 'Empates', 'Derrotas']
     values = [summary['Vitórias'], summary['Empates'], summary['Derrotas']]
@@ -100,10 +97,7 @@ def plot_result_distribution(summary):
 
 def plot_home_away_performance(summary):
     """
-    Plota o desempenho em casa e fora do Chelsea.
-    
-    Parâmetros:
-    - summary (dict): Dicionário com métricas do desempenho.
+    Plota o desempenho em casa e fora do Chelsea a partir do resumo (dicionário).
     """
     categories = ['Vitórias', 'Taxa de Vitória em Casa (%)', 'Taxa de Vitória Fora (%)']
     values = [summary['Vitórias'], summary['Taxa de Vitória em Casa (%)'], summary['Taxa de Vitória Fora (%)']]
@@ -119,9 +113,6 @@ def plot_home_away_performance(summary):
 def plot_attendance_trend(game_details):
     """
     Plota a tendência de público nos jogos do Chelsea.
-    
-    Parâmetros:
-    - game_details (DataFrame): DataFrame com detalhes dos jogos.
     """
     plt.figure(figsize=(12, 6))
     sns.lineplot(data=game_details, x='date', y='attendance', label='Público', marker='o')
