@@ -18,3 +18,43 @@ def player_stats(chelsea_appearances, players):
     )
 
     return chelsea_player_stats
+
+def analyze_goals_by_players(chelsea_games, chelsea_appearances, game_events):
+    print(game_events['date'].dtype)
+    """
+    Analisa os jogadores responsáveis pelos gols do Chelsea em cada temporada.
+    
+    Parâmetros:
+    - chelsea_games (DataFrame): Dados de jogos do Chelsea.
+    - chelsea_appearances (DataFrame): Informações de aparições dos jogadores.
+    - game_events (DataFrame): Eventos de jogos, como gols.
+
+    Retorna:
+    - DataFrame com número de gols por jogador e temporada.
+    """
+    # Filtrar eventos de gols
+    goals_events = game_events[game_events['type'] == 'Goals']
+    
+    # Garantir que game_events e chelsea_appearances têm as colunas necessárias
+    required_columns = ['player_id', 'date', 'game_id']
+    for col in required_columns:
+        if col not in goals_events.columns:
+            raise ValueError(f"Coluna {col} não encontrada em game_events")
+    
+    if 'player_id' not in chelsea_appearances.columns:
+        raise ValueError("Coluna player_id não encontrada em chelsea_appearances")
+
+    # Combinar eventos com aparições do Chelsea
+    goals_events = goals_events.merge(chelsea_appearances, on='player_id', how='inner')
+    
+    # Adicionar a coluna do ano
+    goals_events['year'] = pd.to_datetime(goals_events['date']).dt.year
+
+    # Contar gols por jogador e temporada
+    goals_by_players = (
+        goals_events.groupby(['year', 'player_name'])
+        .size()
+        .reset_index(name='total_goals')
+    )
+    
+    return goals_by_players
