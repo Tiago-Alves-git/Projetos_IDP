@@ -1,0 +1,10 @@
+ano,did_win_big_title,description
+2015,True,"Premier League, EFL Cup"
+2016,False,No major titles
+2017,True,Premier League
+2018,True,FA Cup
+2019,True,UEFA Europa League
+2020,False,No major titles
+2021,True,"UEFA Champions League, UEFA Super Cup, FIFA Club World Cup"
+2022,False,No major titles
+2023,False,No major titles
