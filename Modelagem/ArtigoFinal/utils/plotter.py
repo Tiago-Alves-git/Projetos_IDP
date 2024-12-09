@@ -1,12 +1,13 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
+import pandas as pd
 
 def plot_market_trend(market_trend):
     """
     Plota um gráfico separado para cada ano, mostrando a evolução do valor de mercado médio do Chelsea.
     """
     # Garantir que a coluna 'year' esteja presente para separar os dados por ano
-    market_trend['year'] = market_trend['date'].dt.year
+    market_trend['year'] = pd.to_datetime(market_trend['date']).dt.year
 
     # Obter a lista de anos únicos
     unique_years = market_trend['year'].unique()
@@ -33,14 +34,14 @@ def plot_market_trend(market_trend):
         plt.show()
 
 
-
 def plot_top_players(chelsea_player_stats):
-    # Seleciona os top 10 jogadores por gols
+    """
+    Plota os top 10 jogadores do Chelsea por gols marcados.
+    """
     top_players = chelsea_player_stats.nlargest(10, 'total_goals')
 
-    # Visualização
     plt.figure(figsize=(10, 6))
-    sns.barplot(data=top_players, x='total_goals', y='name', palette='Blues_r', hue='name', dodge=False)
+    sns.barplot(data=top_players, x='total_goals', y='player_name', palette='Blues_r', hue='player_name', dodge=False)
     plt.title('Top 10 Jogadores do Chelsea por Gols')
     plt.xlabel('Total de Gols')
     plt.ylabel('Jogadores')
@@ -52,20 +53,28 @@ def plot_game_summary(game_summary):
     Plota gráficos de desempenho do Chelsea por jogos.
     """
     # Gráfico de barras para vitórias, empates e derrotas
+    game_summary_data = {
+        'Categoria': ['Vitórias', 'Empates', 'Derrotas'],
+        'Jogos': [game_summary['wins'].sum(), game_summary['draws'].sum(), game_summary['losses'].sum()]
+    }
+    game_summary_df = pd.DataFrame(game_summary_data)
+
     plt.figure(figsize=(12, 6))
-    sns.barplot(x=['Vitórias', 'Empates', 'Derrotas'], 
-                y=[game_summary['wins'], game_summary['draws'], game_summary['losses']], 
-                palette='pastel')
+    sns.barplot(x='Categoria', y='Jogos', data=game_summary_df, palette='pastel')
     plt.title('Desempenho do Chelsea')
     plt.ylabel('Número de Jogos')
     plt.tight_layout()
     plt.show()
 
     # Gráfico de barras para gols marcados e sofridos
+    goals_data = {
+        'Categoria': ['Gols Marcados', 'Gols Sofridos'],
+        'Gols': [game_summary['total_goals'].sum(), game_summary['total_goals_conceded'].sum()]
+    }
+    goals_df = pd.DataFrame(goals_data)
+
     plt.figure(figsize=(12, 6))
-    sns.barplot(x=['Gols Marcados', 'Gols Sofridos'], 
-                y=[game_summary['total_goals'], game_summary['total_goals_conceded']], 
-                palette='coolwarm')
+    sns.barplot(x='Categoria', y='Gols', data=goals_df, palette='coolwarm')
     plt.title('Gols Marcados e Sofridos pelo Chelsea')
     plt.ylabel('Quantidade de Gols')
     plt.tight_layout()
@@ -109,7 +118,7 @@ def plot_home_away_performance(summary):
 
 def plot_attendance_trend(game_details):
     """
-    Plota a tendência de público nos jogos.
+    Plota a tendência de público nos jogos do Chelsea.
     
     Parâmetros:
     - game_details (DataFrame): DataFrame com detalhes dos jogos.

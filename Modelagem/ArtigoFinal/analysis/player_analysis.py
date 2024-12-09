@@ -20,21 +20,15 @@ def player_stats(chelsea_appearances, players):
     return chelsea_player_stats
 
 def analyze_goals_by_players(chelsea_games, chelsea_appearances, game_events):
-    print(game_events['date'].dtype)
     """
     Analisa os jogadores responsáveis pelos gols do Chelsea em cada temporada.
-    
-    Parâmetros:
-    - chelsea_games (DataFrame): Dados de jogos do Chelsea.
-    - chelsea_appearances (DataFrame): Informações de aparições dos jogadores.
-    - game_events (DataFrame): Eventos de jogos, como gols.
-
-    Retorna:
-    - DataFrame com número de gols por jogador e temporada.
     """
     # Filtrar eventos de gols
     goals_events = game_events[game_events['type'] == 'Goals']
     
+    # Garantir que a coluna 'date' seja convertida para datetime
+    game_events['date'] = pd.to_datetime(game_events['date'], errors='coerce')
+
     # Garantir que game_events e chelsea_appearances têm as colunas necessárias
     required_columns = ['player_id', 'date', 'game_id']
     for col in required_columns:
@@ -44,11 +38,16 @@ def analyze_goals_by_players(chelsea_games, chelsea_appearances, game_events):
     if 'player_id' not in chelsea_appearances.columns:
         raise ValueError("Coluna player_id não encontrada em chelsea_appearances")
 
-    # Combinar eventos com aparições do Chelsea
-    goals_events = goals_events.merge(chelsea_appearances, on='player_id', how='inner')
-    
+    print("Antes do merge:", goals_events.head())  # Depuração para conferir dados antes do merge
+
+    # Combinar eventos de gols com aparições do Chelsea
+    goals_events = goals_events.merge(chelsea_appearances[['player_id', 'player_name']], on='player_id', how='inner')
+
     # Adicionar a coluna do ano
-    goals_events['year'] = pd.to_datetime(goals_events['date']).dt.year
+    goals_events['year'] = pd.to_datetime(goals_events['date'], errors='coerce').dt.year
+
+    # Depuração para garantir que as colunas necessárias foram adicionadas corretamente
+    print("Após o merge:", goals_events.head())  # Verificação para conferir os dados pós-merge
 
     # Contar gols por jogador e temporada
     goals_by_players = (
@@ -56,5 +55,11 @@ def analyze_goals_by_players(chelsea_games, chelsea_appearances, game_events):
         .size()
         .reset_index(name='total_goals')
     )
-    
+
+    # Verificar os dados do resultado
+    print("Gols por jogador por temporada:", goals_by_players.head())  # Verificando o resultado
+
     return goals_by_players
+
+
+
