@@ -43,6 +43,27 @@ def preprocess_club_data(clubs, club_games, appearances, player_valuations, play
 
     # Filtrar jogadores do Chelsea
     chelsea_players = players[players['current_club_id'] == chelsea_id]
+    
+    # Remover colunas desnecessárias
+    columns_to_drop = [
+        'agent_name', 'image_url', 'player_code', 'first_name', 
+        'last_name', 'city_of_birth', 'country_of_citizenship', 
+        'contract_expiration_date', 'url'
+    ]
+    chelsea_players = chelsea_players.drop(columns=columns_to_drop)
+    
+    # Remover registros com dados inconsistentes nas colunas essenciais
+    chelsea_players = chelsea_players.dropna(subset=['name', 'player_id', 'market_value_in_eur', 'highest_market_value_in_eur'])
+    
+    # Opcional: remover valores negativos ou fora do esperado (se aplicável)
+    chelsea_players = chelsea_players[(chelsea_players['market_value_in_eur'] >= 0) & (chelsea_players['highest_market_value_in_eur'] >= 0)]
+    
+    # Tratar valores NaN em colunas restantes
+    chelsea_players = chelsea_players.fillna({
+        'height_in_cm': chelsea_players['height_in_cm'].mean(),  # Substituir por média
+        'foot': 'unknown'  # Substituir valores ausentes por 'unknown'
+    })
+    
 
     # Obter informações gerais do clube Chelsea
     chelsea_info = clubs[clubs['club_id'] == chelsea_id]

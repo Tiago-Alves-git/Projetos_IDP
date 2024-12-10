@@ -318,3 +318,105 @@ def plot_goals_assist_impact(appearances, player_valuations):
     plt.grid(color="gray", linestyle="--", linewidth=0.5, alpha=0.7)
     plt.tight_layout()
     plt.show()
+
+## Plotagens profissas
+
+
+def plot_pie_chart_title(chelsea_titles_in_year):
+    sns.set_theme(style="whitegrid")
+    title_counts = chelsea_titles_in_year['did_win_big_title'].value_counts()
+    
+    # Criar figura e eixo corretamente
+    fig, ax = plt.subplots(figsize=(6, 6))
+    
+    # Usar o eixo para o gráfico de pizza
+    ax.pie(title_counts, labels=['Won Titles', 'No Titles'], autopct='%1.1f%%', 
+           startangle=90, colors=['#4CAF50', '#FFC107'])
+    ax.set_title("Chelsea's Title Wins Distribution (2015-2023)", fontsize=14, fontweight='bold')
+    
+    plt.show()
+
+
+def plot_bar_chart_club_valuation(chelsea_valuation_in_year):
+    sns.set_theme(style="whitegrid")    
+    
+    # Criar a figura e o eixo corretamente
+    fig, ax = plt.subplots(figsize=(10, 6))
+    
+    # Passar apenas o eixo para o Seaborn
+    sns.barplot(x='year', y='value', data=chelsea_valuation_in_year, palette='Blues_d', ax=ax)
+    
+    # Adicionar título e rótulos
+    ax.set_title("Chelsea's Valuation Over Years (2015-2023)", fontsize=14, fontweight='bold')
+    ax.set_xlabel("Year", fontsize=12)
+    ax.set_ylabel("Value (€ Million)", fontsize=12)
+    
+    plt.show()
+
+
+def plot_regression_plot_valuation(chelsea_valuation_in_year):
+    sns.set_theme(style="whitegrid")
+    
+    # Criar figura e eixo corretamente
+    fig, ax = plt.subplots(figsize=(10, 6))
+    
+    # Gerar gráfico de regressão
+    sns.regplot(
+        x='year', 
+        y='value', 
+        data=chelsea_valuation_in_year, 
+        scatter_kws={'s': 50}, 
+        line_kws={'color': 'red'}, 
+        ax=ax
+    )
+    
+    # Configurar título e rótulos
+    ax.set_title("Regression Analysis of Chelsea's Valuation (2015-2023)", fontsize=14, fontweight='bold')
+    ax.set_xlabel("Year", fontsize=12)
+    ax.set_ylabel("Value (€ Million)", fontsize=12)
+    
+    plt.show()
+
+
+def heat_map_title_wins(chelsea_valuation_in_year, chelsea_titles_in_year):
+    sns.set_theme(style="whitegrid")
+
+    # Limpar nomes das colunas
+    chelsea_titles_in_year.columns = chelsea_titles_in_year.columns.str.strip()
+    chelsea_valuation_in_year.columns = chelsea_valuation_in_year.columns.str.strip()
+
+    print(chelsea_titles_in_year.columns)
+    print(chelsea_valuation_in_year.columns)
+
+
+    # Verificar novamente a existência das colunas
+    if 'year' not in chelsea_valuation_in_year.columns:
+        raise KeyError("A coluna 'year' não está presente na tabela de valuations.")
+    if 'year' not in chelsea_titles_in_year.columns:
+        raise KeyError("A coluna 'ano' não está presente na tabela de títulos.")
+
+    # Realizar o merge utilizando as colunas específicas
+    merged_data = chelsea_valuation_in_year.merge(
+        chelsea_titles_in_year,
+        left_on='year',
+        right_on='year'
+    )
+
+    # Converter a coluna did_win_big_title para numérico
+    merged_data['did_win_big_title'] = merged_data['did_win_big_title'].astype(int)
+
+    # Calcular a matriz de correlação
+    corr_matrix = merged_data[['value', 'did_win_big_title']].corr()
+
+    # Plotar o mapa de calor
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(
+        corr_matrix,
+        annot=True,
+        cmap='coolwarm',
+        fmt=".2f",
+        linewidths=0.5
+    )
+    plt.title("Correlation Between Valuation and Title Wins (2015-2023)")
+    plt.show()
+
