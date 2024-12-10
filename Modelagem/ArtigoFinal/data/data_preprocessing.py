@@ -1,14 +1,28 @@
 import pandas as pd
 
 def preprocess_club_data(clubs, club_games, appearances, player_valuations, players, games):
-    # Manter essa função como está
+    """
+    Pré-processa dados relacionados a um clube específico, neste caso o Chelsea FC.
 
+    Args:
+        clubs (DataFrame): Informações gerais sobre clubes.
+        club_games (DataFrame): Jogos relacionados aos clubes.
+        appearances (DataFrame): Informações sobre as participações dos jogadores nos jogos.
+        player_valuations (DataFrame): Dados sobre a valorização dos jogadores.
+        players (DataFrame): Informações gerais sobre os jogadores.
+        games (DataFrame): Dados detalhados dos jogos.
+
+    Returns:
+        Tuple[DataFrame, DataFrame, DataFrame, DataFrame, DataFrame]: 
+            Dados pré-processados sobre jogos, participações, avaliações, jogadores e informações gerais do Chelsea.
+    """
     chelsea_id = 631
 
+    # Processar jogos do Chelsea
     chelsea_games = club_games[club_games['club_id'] == chelsea_id].merge(
-    games[['game_id', 'date', 'home_club_id', 'away_club_id', 'attendance']],
-    on='game_id',
-    how='inner'
+        games[['game_id', 'date', 'home_club_id', 'away_club_id', 'attendance', 'competition_id']],
+        on='game_id',
+        how='inner'
     )
 
     chelsea_games['is_home'] = chelsea_games['home_club_id'] == chelsea_id
@@ -16,21 +30,25 @@ def preprocess_club_data(clubs, club_games, appearances, player_valuations, play
     chelsea_games['is_loss'] = chelsea_games['own_goals'] < chelsea_games['opponent_goals']
     chelsea_games['is_draw'] = chelsea_games['own_goals'] == chelsea_games['opponent_goals']
 
-# Aparições de jogadores do Chelsea, incluindo a data
+    # Processar aparições de jogadores do Chelsea
     chelsea_appearances = appearances[appearances['player_club_id'] == chelsea_id][[
         'appearance_id', 'game_id', 'player_id', 'player_club_id', 'date', 'player_name',
         'yellow_cards', 'red_cards', 'goals', 'assists', 'minutes_played'
     ]]
     
-    # Valores de mercado dos jogadores do Chelsea, incluindo a data
+    # Processar avaliações de mercado de jogadores do Chelsea
     chelsea_player_valuations = player_valuations[
         player_valuations['current_club_id'] == chelsea_id
-    ][['player_id', 'date', 'market_value_in_eur', 'current_club_id']]
+    ][['player_id', 'date', 'market_value_in_eur', 'current_club_id', 'player_club_domestic_competition_id']]
+
+    # Filtrar jogadores do Chelsea
     chelsea_players = players[players['current_club_id'] == chelsea_id]
 
+    # Obter informações gerais do clube Chelsea
     chelsea_info = clubs[clubs['club_id'] == chelsea_id]
 
     return chelsea_games, chelsea_appearances, chelsea_player_valuations, chelsea_players, chelsea_info
+
 
 def data_preprocessing_game_summary(players, games, game_events, club_games):
     """

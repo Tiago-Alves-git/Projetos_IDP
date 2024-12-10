@@ -253,3 +253,68 @@ def plot_valuation_goals_correlation(player_data):
 
     # Exibir o gráfico
     plt.show()
+
+def plot_goals_assist_impact(appearances, player_valuations):
+    # Filtrar jogadores do Chelsea (player_club_id = 631)
+    chelsea_appearances = appearances[appearances["player_club_id"] == 631]
+    
+    # Fazer o merge para adicionar o valor de mercado aos dados de performance
+    merged_data = pd.merge(chelsea_appearances, player_valuations, on="player_id", how="inner")
+    
+    # Plotando o gráfico
+    plt.figure(figsize=(14, 10))
+
+    # Plot aprimorado com melhor estética
+    scatter = sns.scatterplot(
+        data=merged_data,
+        x="goals",
+        y="market_value_in_eur",
+        size="minutes_played",
+        hue="assists",
+        sizes=(50, 300),
+        palette="coolwarm",
+        edgecolor="black",
+        alpha=0.8,  # Transparência para sobreposição mais clara
+    )
+    
+    # Adicionando título, rótulos e legenda customizada
+    scatter.set_title(
+        "Impacto de Gols, Assistências e Minutos Jogados no Valor de Mercado (Chelsea)",
+        fontsize=18,
+        weight="bold",
+    )
+    scatter.set_xlabel("Gols Marcados", fontsize=14)
+    scatter.set_ylabel("Valor de Mercado (€)", fontsize=14)
+    
+    # Ajustando escala do eixo Y (se necessário)
+    scatter.set_yscale("log")  # Logaritmo para valores amplos (opcional)
+    
+    # Personalizando a legenda
+    handles, labels = scatter.get_legend_handles_labels()
+    legend_labels = [
+        f"{label} Assistências" if label.isdigit() else label for label in labels
+    ]
+    plt.legend(
+        handles=handles,
+        labels=legend_labels,
+        title="Legenda",
+        title_fontsize=14,
+        fontsize=12,
+        loc="upper left",
+        bbox_to_anchor=(1, 1),
+    )
+    
+    # Adicionando linhas de tendência para indicar possíveis padrões
+    sns.regplot(
+        data=merged_data,
+        x="goals",
+        y="market_value_in_eur",
+        scatter=False,
+        color="gray",
+        line_kws={"linestyle": "--", "alpha": 0.7},
+    )
+    
+    # Habilitando grid para facilitar leitura
+    plt.grid(color="gray", linestyle="--", linewidth=0.5, alpha=0.7)
+    plt.tight_layout()
+    plt.show()
